@@ -18,6 +18,8 @@ static char doc[] =
 	"Oireachtas data API.";
 
 static struct argp_option options[] = {
+	{ "endpoint",     'E', "STR",  0, "Endpoint to query" },
+	{ "output",       'o', "FILE", 0, "Output to FILE instead of standard output" },
 	{ "house-no",     'H', "INT",  0, "Filter by House Number." },
 	{ "limit",        'L', "INT",  0, "Limit number of returned records" },
 	{ "skip",         'S', "INT",  0, "Skip records (for pagination)" },
@@ -41,7 +43,6 @@ static struct argp_option options[] = {
 	{ "chamber-type", 't', "STR",  0, "Filter results by house i.e. Dail or Seanad or committees" },
 	{ "chamber-id",   'C', "URI",  0, "Filter by house or committee URI. Example /ie/oireachtas/house/dail/32" },
 	{ "qtype",        'T', "STR",  0, "Filter questions by oral or writtens" },
-	{ "output",       'o', "FILE", 0, "Output to FILE instead of standard output" },
 	{ 0 }
 };
 
@@ -53,6 +54,7 @@ struct Arguments {
 
 	Arguments() {
 		outputFile = "-";
+		endpoint = "";
 	}
 };
 
@@ -170,6 +172,9 @@ parse_opt(int key, char *arg, struct argp_state *state) {
 	case 'o':
 			args->outputFile = std::string(arg);
 			break;
+	case 'E':
+			args->endpoint = std::string(arg);
+			break;
 	default:
 		return ARGP_ERR_UNKNOWN;
 	}
@@ -206,8 +211,30 @@ int main(int argc, char *argv[]) {
 
 	odd::OireachtasApi api(arguments.conf);
 
-	api.members(arguments.filter);
-	
+	if (arguments.endpoint == "") {
+		std::cin >> arguments.endpoint;
+	}
+
+	if (arguments.endpoint == "legislation") {
+		api.legislation(arguments.filter);
+	} else if (arguments.endpoint == "debates") {
+		api.debates(arguments.filter);
+	} else if (arguments.endpoint == "constituencies") {
+		api.constituencies(arguments.filter);
+	} else if (arguments.endpoint == "parties") {
+		api.parties(arguments.filter);
+	} else if (arguments.endpoint == "divisions") {
+		api.divisions(arguments.filter);
+	} else if (arguments.endpoint == "questions") {
+		api.questions(arguments.filter);
+	} else if (arguments.endpoint == "houses") {
+		api.houses(arguments.filter);
+	} else if (arguments.endpoint == "members") {
+		api.members(arguments.filter);
+	} else {
+		std::cerr << "Unknown endpoint " << arguments.endpoint << std::endl;
+	}
+
 	// if output was written to file, close file
 	if (f) { fclose(f); }
 

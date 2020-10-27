@@ -1,0 +1,169 @@
+=head1 NAME
+
+odd - the Oireachtas Data Downloader
+
+=head1 SYNOPSIS
+
+odd [B<--endpoint>=I<STR>] [B<--output>=I<FILE>] [B<--house-no>=I<INT>]
+[B<--limit>=I<INT>] [B<--skip>=I<INT>] [B<--language>=I<STR>] [B<--act-no>=I<INT>]
+[B<--act-year>=I<YEAR>] [B<--date-start>=I<DATE>] [B<--date-end>=I<DATE>]
+[B<--debate-id>=I<URI>] [B<--outcome>=I<LIST>] [B<--member-id>=I<URI>]
+[B<--vote-id>=I<URI>] [B<--question-id>=I<URI>] [B<--question-no>=I<INT>]
+[B<--bill-id>=I<URI>] [B<--bill-no>=I<URI>] [B<--bill-year>=I<YEAR>]
+[B<--bill-source>=I<LIST>] [B<--bill-status>=I<LIST>] [B<--chamber>=I<STR>]
+[B<--chamber-type>=I<STR>] [B<--chamber-id>=I<URI>] [B<--qtype>=I<STR>]
+
+odd --help
+
+=head1 DESCRIPTION
+
+The Oireachtas API provides eight endpoints over which you can query:
+
+=over
+
+=item * legislation
+
+=item * debates
+
+=item * constituencies
+
+=item * parties
+
+=item * divisions
+
+=item * questions
+
+=item * houses
+
+=item * members
+
+These are all valid endpoints which may be passed to the I<--endpoint> argument.
+
+If I<--endpoint> is not set, odd will expect to find an endpoint name in stdin. Hence
+we can pipe a request to an endpoint from a separate bash program
+	
+	echo "members" | odd
+
+=back
+
+=head1 OPTIONS
+
+=over 4
+
+=item  B<-o> I<FILE>,B<--output>=I<FILE>
+
+Output to FILE instead of standard output
+
+=item B<-E> I<STR>, B<--endpoint>=I<STR>
+
+Choose which oireachtas endpoint to query
+
+=item B<-H> I<INT>, B<--house-no>=I<INT>
+
+Filter by House Number.
+
+=item B<-L> I<INT>, B<--limit>=I<INT>
+
+Limit number of returned records.
+
+=item B<-S> I<INT>, B<--skip>=I<INT>
+
+Skip records (for pagination).
+
+=item B<-l> I<LANG>, B<--language>=I<LANG>
+
+Language of document to extract. Defaults to English (en).
+
+=item B<-A> I<INT>, B<--act-no>=I<INT>
+
+Filter bill by act number
+
+=item B<-a> I<INT>, B<--act-year>=I<INT>
+
+Filter bill by act year
+
+=item B<-s> I<DATE>, B<--date-start>=I<DATE>
+
+Filter by start date related to the section
+
+=item B<-e> I<DATE>, B<--date-end>=I<DATE>
+
+Filter by end date related to section
+
+=item B<-d> I<URI>, B<--debate-id>=I<URI>
+
+Filter by debate URI
+
+=item B<-O> I<LIST>, B<--outcome>=I<LIST>
+
+Filter divisions by outcome
+
+=item B<-M> I<URI>, B<--member-id>=I<URI> 
+
+Filter by member URI
+
+=item B<-V> I<URI>, B<--vote-id>=I<URI>
+
+Division identifier for a single division
+
+=item B<-Q> I<URI>, B<--question-id>=I<URI>
+
+Identifier for a single question
+
+=item  B<-q> I<INT>, B<--question-no>=I<INT>
+
+Filter by question No.
+
+=item  B<-B> I<URI>, B<--bill-id>=I<URI>
+
+Filter results by Bill URI e.g. /ie/oireachtas/bill/2016/2
+
+=item  B<-b> I<INT>, B<--bill-no>=I<INT>
+
+Filter Bill by number
+
+=item  B<-R> I<YEAR>,B<--bill-year>=I<YEAR>
+
+Filter Bill by year
+
+=item  B<-r> I<LIST>,B<--bill-source>=I<LIST>
+
+An array used to filter legislation by origin source"
+
+=item  B<-p> I<LIST>,B<--bill-status>=I<LIST>
+
+An array which is used to filter legislation by status
+
+=item  B<-c> I<STR>, B<--chamber>=I<STR>
+
+Filter by house name (dail or seanad)
+
+=item  B<-t> I<STR>, B<--chamber-type>=I<STR>
+
+Filter results by house i.e. Dail or Seanad or committees
+
+=item  B<-C> I<URI>, B<--chamber-id>=I<URI>
+
+Filter by house or committee URI. Example /ie/oireachtas/house/dail/32
+
+=item  B<-T> I<STR>, B<--qtype>=I<STR>
+
+Filter questions by oral or writtens
+
+=back
+
+=head1 EXAMPLES
+
+A trivial example use-case would be to download a list of all members who have
+served either in the Dail or the Seanad.
+
+	odd -E members
+
+=head1 AUTHOR
+
+Written by Gary Munnelly <munnellg@tcd.ie>
+
+=head1 REPORTING BUGS
+
+Bugs can be logged on the project's Github repository
+https://github.org/munnellg/oireachtas-data-downloader

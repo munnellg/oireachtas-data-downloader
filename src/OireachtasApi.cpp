@@ -9,57 +9,6 @@
 
 namespace odd {
 
-
-/*
-static size_t resp2str(char *ptr, size_t size, size_t nmemb, void *userdata) {
-	std::string *data = static_cast<std::string *>(userdata);
-	std::copy(ptr, ptr + size * nmemb, std::back_inserter(*data));
-	return size * nmemb;
-}
-
-static CURLcode web_request(std::string url, std::string &resp_data,
-		struct curl_slist *headers = nullptr) {
-	CURL *curl = curl_easy_init();
-
-	char errbuf[CURL_ERROR_SIZE] = {0};
-
-	if (!curl) {
-		std::cerr << "Easy cURL initialization failed" << std::endl;
-		return CURLE_FAILED_INIT;
-	}
-	
-	curl_easy_setopt(curl, CURLOPT_HTTPHEADER, headers);
-	
-	// follow redirects
-	curl_easy_setopt(curl, CURLOPT_FOLLOWLOCATION, 1L);
-
-	// configure callback for parsing webpage
-	curl_easy_setopt(curl, CURLOPT_WRITEDATA, &resp_data);
-	curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, resp2str);
-	
-	// register pointer to buffer for human readable error messages
-	curl_easy_setopt(curl, CURLOPT_ERRORBUFFER, errbuf);
-
-	// set target URL
-	curl_easy_setopt(curl, CURLOPT_URL, url.c_str());
-
-	// execute the request
-	CURLcode res = curl_easy_perform(curl);
-
-	curl_easy_cleanup(curl);
-
-	return res;
-}
-
-static std::string query_endpoint(std::string const &url, OireachtasFilter const &filter) {
-	std::string resp_data;
-
-	CURLcode res = web_request(url + filter.qstring(), resp_data);
-
-	return resp_data;
-}
-*/
-
 OireachtasApi::OireachtasApi() :
 	OireachtasApi(OireachtasConf()) {}
 
@@ -117,13 +66,34 @@ OireachtasApi::~OireachtasApi() {
 	}
 }
 
-void OireachtasApi::legislation(OireachtasFilter const &filter) const {}
-void OireachtasApi::debates(OireachtasFilter const &filter) const {}
-void OireachtasApi::constituencies(OireachtasFilter const &filter) const {}
-void OireachtasApi::parties(OireachtasFilter const &filter) const {}
-void OireachtasApi::divisions(OireachtasFilter const &filter) const {}
-void OireachtasApi::questions(OireachtasFilter const &filter) const {}
-void OireachtasApi::houses(OireachtasFilter const &filter) const {}
+void OireachtasApi::legislation(OireachtasFilter const &filter) const {
+	doRequest(m_legislationUrl, filter);
+}
+
+void OireachtasApi::debates(OireachtasFilter const &filter) const {
+	doRequest(m_debatesUrl, filter);
+}
+
+void OireachtasApi::constituencies(OireachtasFilter const &filter) const {
+	doRequest(m_constituenciesUrl, filter);
+}
+
+void OireachtasApi::parties(OireachtasFilter const &filter) const {
+	doRequest(m_partiesUrl, filter);
+}
+
+void OireachtasApi::divisions(OireachtasFilter const &filter) const {
+	doRequest(m_divisionsUrl, filter);
+}
+
+void OireachtasApi::questions(OireachtasFilter const &filter) const {
+	doRequest(m_questionsUrl, filter);
+}
+
+void OireachtasApi::houses(OireachtasFilter const &filter) const {
+	doRequest(m_housesUrl, filter);
+}
+
 void OireachtasApi::members(OireachtasFilter const &filter) const {
 	doRequest(m_membersUrl, filter);
 }
