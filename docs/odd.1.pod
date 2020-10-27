@@ -37,14 +37,20 @@ The Oireachtas API provides eight endpoints over which you can query:
 
 =item * members
 
-These are all valid endpoints which may be passed to the I<--endpoint> argument.
+=back
 
-If I<--endpoint> is not set, odd will expect to find an endpoint name in stdin. Hence
+These are all valid endpoints which may be passed to the B<--endpoint> argument. 
+Responses from the server may be filtered according to the facets outlined in the 
+B<OPTIONS> section below.
+
+By default, a limit of 50 records is set for all requests. This limit can be 
+overridden by passing a negative value to the B<--limit> option as shown in the
+B<EXAMPLES> section below.
+
+If B<--endpoint> is not set, odd will expect to find an endpoint name in stdin. Hence
 we can pipe a request to an endpoint from a separate bash program
 	
 	echo "members" | odd
-
-=back
 
 =head1 OPTIONS
 
@@ -128,7 +134,7 @@ Filter Bill by year
 
 =item  B<-r> I<LIST>,B<--bill-source>=I<LIST>
 
-An array used to filter legislation by origin source"
+An array used to filter legislation by origin source
 
 =item  B<-p> I<LIST>,B<--bill-status>=I<LIST>
 
@@ -158,6 +164,18 @@ A trivial example use-case would be to download a list of all members who have
 served either in the Dail or the Seanad.
 
 	odd -E members
+
+As noted above, the responses to this query are limited to 50 records by default. The
+limit imposed by this application may be disabled by passing a negative value to the 
+B<--limit> argument, although the Oireachtas API itself may still impose a limit.
+
+	odd -L -1 -E members
+
+A more intersting example would be to retrieve information about a specific member of
+the Dail or Seanad. The below command fetches information about Henry J.J. Abbott from
+the members endpoint.
+
+	odd -M https://data.oireachtas.ie/ie/oireachtas/member/id/Henry-J-J-Abbott.D.1987-03-10 -E members
 
 =head1 AUTHOR
 

@@ -1,1 +1,1 @@
-# Documentation for Oireachtas Daily Report {#mainpage}
+# Documentation for Oireachtas Data Downloader (ODD) {#mainpage}
